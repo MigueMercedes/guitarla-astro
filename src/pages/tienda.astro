@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import type { Guitarras as GuitarrasI } from '../interfaces/guitarras.interface';
+import Guitarra from '../components/Guitarra.astro';
+
+const url = `${import.meta.env.PUBLIC_API_URL}/guitarras?populate=imagen`
+const respuesta = await fetch(url);
+const { data: guitarras }: GuitarrasI  = await respuesta.json();
+
+---
+
+<Layout title='Tienda - GuitarLA' description='Pagina de tienda de instrumentos musicales, guitarras, cursos, blog y mas'>
+	<main>
+		<h1 class="heading">Nuestra Coleccion</h1>
+
+		<div class="grid">
+			{guitarras.map( guitarra => (
+				<Guitarra 
+					guitarra={guitarra.attributes}
+				/>
+			))}
+		</div>
+	</main>
+</Layout>
+
+<style>
+	
+</style>
