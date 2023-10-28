@@ -1,0 +1,67 @@
+---
+import type { Props } from '../../components/Post.astro';
+import type {
+  Posts as PostsI,
+  DatumAttributes,
+} from '../../interfaces/posts.interface';
+import Layout from '../../layouts/Layout.astro';
+import { formatearFecha } from '../../../utils/helpers';
+
+export async function getStaticPaths() {
+  const url = `${import.meta.env.PUBLIC_API_URL}/posts?populate=imagen`
+  const respuesta = await fetch(url)
+  const { data: posts }: PostsI = await respuesta.json()
+
+  return posts.map((post) => ({
+    params: {
+      id: post.attributes.url,
+    },
+    props: {
+      post: post.attributes,
+    },
+  }))
+}
+
+console.log(Astro.props.post)
+const {titulo, contenido, imagen, createdAt} = Astro.props.post
+---
+
+<Layout
+  title={''}
+  description="Pagina de tienda de instrumentos musicales, guitarras, cursos, blog y mas"
+>
+  <main class="post">
+    <img src={imagen.data.attributes.url} alt={`imagen ${titulo}`} />
+
+    <div class="contenido">
+      <h3>{titulo}</h3>
+      <p class="fecha">{formatearFecha(createdAt)}</p>
+      <p class="texto">{contenido}</p>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .post {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+  .contenido {
+    padding: 1.5rem;
+  }
+  .contenido h3 {
+    font-weight: 900;
+    font-size: 2.8rem;
+    margin: 0;
+  }
+  .fecha {
+    font-size: 1.6rem;
+    color: var(--primary);
+  }
+  .texto {
+    white-space: pre-wrap;
+  }
+  .mt-3 {
+    margin-top: 3rem;
+  }
+</style>

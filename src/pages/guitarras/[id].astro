@@ -1,6 +1,6 @@
 ---
-import { Props } from '../../components/Guitarra.astro';
-import {
+import type { Props } from '../../components/Guitarra.astro';
+import type {
   Guitarras as GuitarrasI,
   DatumAttributes,
 } from '../../interfaces/guitarras.interface';
@@ -21,7 +21,7 @@ export async function getStaticPaths() {
   }))
 }
 
-const { nombre, descripcion, precio, imagen }: DatumAttributes = Astro.props.guitarra;
+const { nombre, descripcion, precio, imagen } = Astro.props.guitarra;
 ---
 
 <Layout
