@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro'
+import HandleCarrito from '../components/HandleCarrito';
+import { carrito as carritoStorage } from '../store/carrito';
+import type { OneGuitarra } from '../interfaces/guitarras.interface';
+
+const carritoLSString = typeof window !== 'undefined' ? localStorage.getItem('carrito') : undefined;
+const carritoLS:OneGuitarra[] = carritoLSString ? JSON.parse(carritoLSString) : [];
+carritoStorage.set(carritoLS)
+  
+	const actualizarCantidad = (guitarra: OneGuitarra) => {
+		const carritoActualizado = carritoStorage.get().map((guitarraState) => {
+			if (guitarraState.id === guitarra.id) {
+				guitarraState.cantidad = parseInt(guitarra.cantidad.toString(), 10);
+			}
+			return guitarraState;
+		});
+		carritoStorage.set(carritoActualizado);
+		window.localStorage.setItem('carrito', JSON.stringify(carritoStorage.get()));
+	};
+
+  const eliminarProducto = (id: number) => {
+    const carritoActualizado = carritoStorage.get().filter((producto) => producto.id !== id);
+    carritoStorage.set(carritoActualizado);
+    window.localStorage.setItem('carrito', JSON.stringify(carritoStorage.get()));
+  };
+  
+---
+<Layout
+  title="Carrito de compras - GuitarLA"
+  description="Pagina de tienda de instrumentos musicales, guitarras, cursos, blog y mas"
+>
+  <main class="contenedor">
+    <HandleCarrito 
+      actualizarCantidad={actualizarCantidad} 
+      eliminarProducto={eliminarProducto}
+    />
+  </main>
+</Layout>

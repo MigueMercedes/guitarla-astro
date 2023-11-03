@@ -20,6 +20,7 @@ const { data: guitarras }: GuitarrasI  = await respuesta.json();
 			{guitarras.map( guitarra => (
 				<Guitarra 
 					guitarra={guitarra.attributes}
+					id={guitarra.id.toString()}
 				/>
 			))}
 		</div>

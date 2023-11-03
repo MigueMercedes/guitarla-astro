@@ -1,10 +1,19 @@
 ---
-import type { Props } from '../../components/Guitarra.astro';
+import { type Props } from '../../components/Guitarra.astro'
+import Comprar from '../../components/Comprar'
 import type {
   Guitarras as GuitarrasI,
-  DatumAttributes,
-} from '../../interfaces/guitarras.interface';
-import Layout from '../../layouts/Layout.astro';
+  Imagen
+} from '../../interfaces/guitarras.interface'
+import Layout from '../../layouts/Layout.astro'
+
+export interface GuitarraActual {
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  imagen: Imagen;
+  id: string;
+}
 
 export async function getStaticPaths() {
   const url = `${import.meta.env.PUBLIC_API_URL}/guitarras?populate=imagen`
@@ -17,11 +26,22 @@ export async function getStaticPaths() {
     },
     props: {
       guitarra: guitarra.attributes,
+      id: guitarra.id,
     },
   }))
 }
 
-const { nombre, descripcion, precio, imagen } = Astro.props.guitarra;
+const { nombre, descripcion, precio, imagen } = Astro.props.guitarra
+const guitarraId = Astro.props.id
+
+const GuitarraActual: GuitarraActual = {
+  nombre, 
+  descripcion,
+  precio,
+  imagen,
+  id: guitarraId
+}
+
 ---
 
 <Layout
@@ -29,25 +49,16 @@ const { nombre, descripcion, precio, imagen } = Astro.props.guitarra;
   description="Pagina de tienda de instrumentos musicales, guitarras, cursos, blog y mas"
 >
   <main class="guitarra">
-    <img src={imagen.data.attributes.url} alt={`imagen ${nombre}`}>
+    <img src={imagen.data.attributes.url} alt={`imagen ${nombre}`} />
 
     <div class="contenido">
       <h3>{nombre}</h3>
       <p class="descripcion">{descripcion}</p>
       <p class="precio">${precio}</p>
-
-      <form action="" class="formulario">
-        <label for="cantidad">Cantidad:</label>
-        <select id="cantidad">
-          <option value="0">-- Seleccione --</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-        
-      </form>
+      
+      <Comprar
+        GuitarraActual={GuitarraActual}
+      />
     </div>
   </main>
 </Layout>
@@ -81,36 +92,5 @@ const { nombre, descripcion, precio, imagen } = Astro.props.guitarra;
     font-size: 4rem;
     margin: 0;
     font-weight: 900;
-  }
-  .formulario {
-    margin-top: 4rem;
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
-  }
-  .formulario label {
-    font-size: 2.2rem;
-  }
-  .formulario select {
-    border: 1px solid var(--black);
-    padding: 1rem;
-    text-align: center;
-    border-radius: 1rem;
-  }
-  .formulario input[type='submit'] {
-    display: block;
-    width: 100%;
-    text-transform: uppercase;
-    font-weight: bold;
-    border: none;
-    padding: 1.4rem;
-    background-color: var(--black);
-    color: var(--white);
-    transition-property: background-color;
-    transition-duration: 300ms;
-  }
-  .formulario input[type='submit']:hover {
-    background-color: var(--primary);
-    cursor: pointer;
   }
 </style>

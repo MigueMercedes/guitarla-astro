@@ -3,6 +3,7 @@ import type { DatumAttributes } from '../interfaces/guitarras.interface'
 
 export interface Props {
   guitarra: DatumAttributes
+  id: string
 }
 
 const { nombre, descripcion, url, precio, imagen } = Astro.props.guitarra

@@ -24,6 +24,10 @@ const pathName = Astro.url.pathname;
       <a href="/blog" class={pathName === '/blog' ? 'active' : ''}>
         Blog
       </a>
+
+      <a href="/carrito" class={pathName === '/carrito' ? 'active' : ''}>
+        <img src="../img/carrito.png" alt="Carrito" width="20px" height="20px" style="width: 25px !important;">
+      </a>|
     </nav>
   </div>
 </header>
